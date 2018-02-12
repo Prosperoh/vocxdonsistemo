@@ -35,15 +35,6 @@ class Elekto(models.Model):
     def __str__(self):
         return self.enhavo
 
-    def validate_unique(self, exclude=None):
-        el = Elekto.objects.filter(enhavo=self.enhavo)
-        if el.filter(ligita_propono=self.ligita_propono).exists():
-            raise ValidationError("Elektoj ne estu samaj.")
-
-    def save(self, *args, **kwargs):
-        self.validate_unique()
-        super(Elekto, self).save(*args, **kwargs)
-
 class Vocxdono(models.Model):
     class Meta:
         verbose_name_plural = 'vocxdonoj'

@@ -5,7 +5,19 @@ from .models import Propono, Elekto, Vocxdono
 
 # Register your models here.
 
+class ElektoInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        # Kontrolas, ĉu ĉiuj elektoj estas malsamaj unu de la alia
+        count_elektoj = {}
+        for form in self.forms:
+            if form.cleaned_data:
+                if form.cleaned_data['enhavo'] in count_elektoj:
+                    raise forms.ValidationError("Elektoj estus malsamaj unu de la alia.")
+                count_elektoj[form.cleaned_data['enhavo']] = 0
+
+
 class ElektoInline(admin.StackedInline):
+    formset = ElektoInlineFormSet
     model = Elekto
     extra = 3
 
