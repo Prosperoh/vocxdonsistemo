@@ -1,0 +1,9 @@
+<h1>{{ propono.titolo }}</h1>
+
+{% if erarmesagxo %}<p><strong>{{ erarmesagxo }}</strong></p>{% endif %}
+
+<ul>
+{% for elekto in proponoj.elekto_set.all %}
+<li>{{ elekto.enhavo }}</li>
+{% endfor %}
+</ul>

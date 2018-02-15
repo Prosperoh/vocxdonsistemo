@@ -37,7 +37,7 @@ class Elekto(models.Model):
 
 class Vocxdono(models.Model):
     class Meta:
-        verbose_name_plural = 'vocxdonoj'
+        verbose_name_plural = 'voĉdonoj'
     uzanto = models.ForeignKey(User)
     vocxo = models.ForeignKey(Elekto)
     dato = models.DateTimeField('dato de la voĉdono')

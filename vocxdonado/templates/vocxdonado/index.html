@@ -1,0 +1,13 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'vocxdonado/style.css' %}" />
+
+{% if listo_proponoj %}
+<ul>
+    {% for propono in listo_proponoj %}
+    <li><a href="{% url 'vocxdonado:detaloj' propono.id %}">{{ propono.titolo }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Ne estas propono en la datumbazo.</p>
+{% endif %}
