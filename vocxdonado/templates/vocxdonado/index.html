@@ -1,7 +1,6 @@
-{% load static %}
+{% extends "base.html" %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'vocxdonado/style.css' %}" />
-
+{% block enhavo %}
 {% if listo_proponoj %}
 <ul>
     {% for propono in listo_proponoj %}
@@ -11,3 +10,5 @@
 {% else %}
 <p>Ne estas propono en la datumbazo.</p>
 {% endif %}
+
+{% endblock enhavo %}

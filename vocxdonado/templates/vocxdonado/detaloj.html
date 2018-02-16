@@ -1,9 +1,37 @@
+{% extends "base.html" %}
+
+{% block enhavo %}
 <h1>{{ propono.titolo }}</h1>
-
+<p>{{ propono.enhavo }}</p>
 {% if erarmesagxo %}<p><strong>{{ erarmesagxo }}</strong></p>{% endif %}
-
-<ul>
-{% for elekto in proponoj.elekto_set.all %}
-<li>{{ elekto.enhavo }}</li>
+{% if propono.fin_dato <= now %}
+<table>
+    <thead>
+        <tr>
+            <td>Elekto</td>
+            <td>Nombro da voĉoj</td>
+        </tr>
+    </thead>
+    <tbody>
+    {% for elekto in propono.elekto_set.all %}
+        <tr>
+            <td>{{ elekto.enhavo }}</td>
+            <td>{{ elekto.vocxdono_set.count }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>La voĉdonado por tiu propono daŭras.</p>
+<form action="{% url 'vocxdonado:vocxdoni' propono.id %}" method="post">
+{% csrf_token %}
+{% for elekto in propono.elekto_set.all %}
+    <input type="radio" name="elekto" id="elekto{{ forloop.counter }}" value="{{ elekto.id }}" />
+    <label for="elekto{{ forloop.counter }}">{{ elekto.enhavo }}</label>
+    <br/>
 {% endfor %}
-</ul>
+<input type="submit" value="Vote" />
+</form>
+{% endif %}
+
+{% endblock enhavo %}

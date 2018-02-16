@@ -1,0 +1,16 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Voĉdonsistemo</title>
+    </head>
+
+    <body>
+    <link rel="stylesheet" type="text/css" href="{% static 'vocxdonado/style.css' %}" />
+    <div id="menuo">
+        <a href="{% url 'vocxdonado:index' %}">Listo de proponoj</a>
+    </div>
+    {% block enhavo %} {% endblock enhavo %}
+    </body>
+</html>

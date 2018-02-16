@@ -43,5 +43,5 @@ class Vocxdono(models.Model):
     dato = models.DateTimeField('dato de la voĉdono')
 
     def __str__(self):
-        return self.uzanto + ": " + self.vocxo.__str__()
+        return "{self.uzanto}: {self.vocxo}".format(self=self)
 
