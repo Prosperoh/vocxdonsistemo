@@ -3,14 +3,22 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Voĉdonsistemo</title>
+        <title>Voĉdonsistemo - {% block subtitolo %}{% endblock subtitolo %}</title>
     </head>
 
     <body>
     <link rel="stylesheet" type="text/css" href="{% static 'vocxdonado/style.css' %}" />
-    <div id="menuo">
-        <a href="{% url 'vocxdonado:index' %}">Listo de proponoj</a>
+    <div id="uzantinformoj">
+        {% if user.is_authenticated %}
+        Bonvenon {% if user.first_name != "" %} {{ user.first_name }} {% else %} {{ user.username }} {% endif %}
+        {% endif %}
     </div>
+    <div id="menuo">
+        <a href="{% url 'vocxdonado:index' %}">Proponoj</a>
+        <a href="{% url 'vocxdonado:uzantoj' %}">Uzantoj</a>
+    </div>
+    <div id="enhavo">
     {% block enhavo %} {% endblock enhavo %}
+    </div>
     </body>
 </html>

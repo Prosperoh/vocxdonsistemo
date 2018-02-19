@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block subtitolo %}Listo de uzantoj{% endblock subtitolo %}
+
+{% block enhavo %}
+{% if listo_uzantoj %}
+<table>
+    <thead>
+        <tr>
+            <td>Uzantonomo</td>
+            <td>Plena nomo</td>
+            <td>Grupo</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for uzanto in listo_uzantoj %}
+        <tr>
+            <td>{{ uzanto.username }}</td>
+            <td>{{ uzanto.first_name }} {{ uzanto.last_name }}</td>
+            <td>{{ uzanto.groups.all.0 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Ne estas uzanto en la datumbazo.</p>
+{% endif %}
+{% endblock enhavo %}

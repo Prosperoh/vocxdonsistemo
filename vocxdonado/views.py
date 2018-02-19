@@ -1,15 +1,18 @@
 from django.shortcuts import render
 from django.views import generic
 from django.utils import timezone
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 
 # Create your views here.
-
+from django.contrib.auth.models import User
 from .models import Propono, Vocxdono
 
-class IndexView(generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
+    login_url='/login/'
+
     template_name = 'vocxdonado/index.html'
     context_object_name = 'listo_proponoj'
 
@@ -17,7 +20,17 @@ class IndexView(generic.ListView):
         """ Sendas ĉiujn proponojn en datumbazo """
         return Propono.objects.all().order_by('fin_dato')
 
-class DetalojView(LoginRequiredMixin, generic.DetailView):
+class UzantojView(LoginRequiredMixin, generic.ListView):
+    login_url='/login/'
+
+    template_name = 'vocxdonado/uzantoj.html'
+    context_object_name = 'listo_uzantoj'
+
+    def get_queryset(self):
+        """ Sendas ĉiujn uzantojn en la datumbazo """
+        return User.objects.all()
+
+class ProponojView(LoginRequiredMixin, generic.DetailView):
     login_url='/login/'
 
     model = Propono
@@ -27,7 +40,7 @@ class DetalojView(LoginRequiredMixin, generic.DetailView):
         return Propono.objects.filter(pub_dato__lte=timezone.now())
 
     def get_context_data(self, **kwargs):
-        context = super(DetalojView, self).get_context_data(**kwargs)
+        context = super(ProponojView, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
         return context
 
@@ -42,9 +55,8 @@ def vocxdoni(request, propono_id):
             'error_message': "Bonvole elektu iun el la voĉeblecoj.",
         })
     else:
-        vocxdono = Vocxdono(uzanto=None, vocxo=elektitajxo,
+        vocxdono = Vocxdono(uzanto=request.user, vocxo=elektitajxo,
                 dato=timezone.now())
         vocxdono.save()
-        return HttpResponseRedirect(reverse('vocxdonado:detaloj',
-            args=(propono.id,)))
+        return redirect(reverse('vocxdonado:detaloj', args=(propono.id,)))
 
