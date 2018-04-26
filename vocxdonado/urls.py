@@ -11,6 +11,8 @@ urlpatterns = [
 #            name='results'),
         url(r'^(?P<propono_id>[0-9]+)/vocxdoni/$', views.vocxdoni,
             name='vocxdoni'),
+        url(r'^krei_proponon/$', views.krei_proponon,
+            name='krei_proponon'),
     ]
 
 

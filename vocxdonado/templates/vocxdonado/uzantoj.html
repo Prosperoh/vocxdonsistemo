@@ -17,7 +17,8 @@
         <tr>
             <td>{{ uzanto.username }}</td>
             <td>{{ uzanto.first_name }} {{ uzanto.last_name }}</td>
-            <td>{{ uzanto.groups.all.0 }}</td>
+			<td>{{ uzanto.groups.all | join:", " }}
+			</td>
         </tr>
         {% endfor %}
     </tbody>

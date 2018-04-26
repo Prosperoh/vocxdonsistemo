@@ -3,6 +3,9 @@
 {% block subtitolo %}Hejmpaĝo{% endblock subtitolo %}
 
 {% block enhavo %}
+<p><a href="{% url 'vocxdonado:krei_proponon' %}">Krei novan
+	proponon</a></p>
+<p>Listo de proponoj:</p>
 {% if listo_proponoj %}
 <ul>
     {% for propono in listo_proponoj %}

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
 from django.utils import timezone
+from django import forms
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -8,7 +9,7 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 from django.contrib.auth.models import User
-from .models import Propono, Vocxdono
+from .models import Propono, ProponoForm, Elekto, Vocxdono
 
 class IndexView(LoginRequiredMixin, generic.ListView):
     login_url='/login/'
@@ -60,3 +61,19 @@ def vocxdoni(request, propono_id):
         vocxdono.save()
         return redirect(reverse('vocxdonado:detaloj', args=(propono.id,)))
 
+@login_required
+def krei_proponon(request):
+    if request.method == 'POST':
+        form = ProponoForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            # do something.
+            return redirect(reverse('vocxdonado:index'))
+        else:
+            return render(request, 'vocxdonado/krei_proponon.html', {'form': form})
+    else:
+        form = ProponoForm()
+        #ElektoInlineFormSet = forms.inlineformset_factory(Propono, Elekto,
+        #                                                  fields=('enhavo',))
+        return render(request, 'vocxdonado/krei_proponon.html', {'form': form})

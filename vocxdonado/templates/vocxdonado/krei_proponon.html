@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block subtitolo %}Krei novan proponon{% endblock subtitolo %}
+
+{% block enhavo %}
+<h1>Krei novan proponon</h1>
+
+<form method="post" action="">{% csrf_token %}
+	{{ form.as_p }}
+	<button type="submit" class="save btn btn-default">Enregistrigi</button>
+</form>
+
+{% endblock enhavo %}
