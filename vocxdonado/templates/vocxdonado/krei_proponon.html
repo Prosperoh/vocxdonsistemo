@@ -8,31 +8,43 @@
 <h1>Krei novan proponon</h1>
 
 <script>
-	$(function() {
-		// this is on click event just to demo.
-		// You would probably run this at page load or quantity change.
-		$("#nombro_eblaj_elektoj").change(function() {
-			document.write("Hallo!");
-			// update total form count
-			quantity = $("#nombro_eblaj_elektoj").val();
-			$("#total_form").val(quantity);
+	function genInputFields() {
+		var quantity =
+			document.getElementById("id_nombro_eblaj_elektoj").value;
+		var forms = document.getElementById("forms");
+		var children = forms.getElementsByTagName("input");
+		var currentValues = [];
+		for (i = 0; i < children.length; i++) {
+			currentValues.push(children[i].value);
+			console.log(children[i].value);
+		}
+		console.log("\n");
+		while (forms.firstChild) {
+		    forms.removeChild(forms.firstChild);
+		}
 
-			// copy the template and replace prefixes with the correct index
-			for (i = 0; i < quantity; i++) {
-				// Note: Must use global replace here
-				html = $("#form_template").clone().html().replace(/__prefix_/g, i);
-				$("#forms").append(html);
-			};
-		})
-	})
+		for (i = 0; i < quantity; i++) {
+			var input = document.createElement("input");
+			input.type = "text";
+			input.maxlength = 128;
+			input.name = "elekto".i;
+			input.id = "id_elekto".i;
+			if (currentValues[i] != undefined) {
+				input.value = currentValues[i];
+			}
+			forms.appendChild(input);
+			forms.appendChild(document.createElement("br"));
+		};
+	}
 </script>
 <form method="post" id="total_form" action="">{% csrf_token %}
 	{{ propono_form.as_p }}
 	{{ elektoj_formset.management_form }}
-	<div style="display:none;" id="form_template">
-		{{ elektoj_formset.as_p }}
-	</div><!-- stores empty form for javascript -->
-	<div id="forms"></div><!-- where the generated forms go -->
+	{{ elektoj_formset.id }}
+	<div id="forms">
+	<input type="text" name="elekto0" maxlength="128"
+	required id="id_elekto0"/>
+	</div><!-- where the generated forms go -->
 	<button type="submit" class="save btn btn-default">Enregistrigi</button>
 </form>
 
