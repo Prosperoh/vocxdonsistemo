@@ -63,17 +63,24 @@ def vocxdoni(request, propono_id):
 
 @login_required
 def krei_proponon(request):
+    ElektojInlineFormSet = forms.inlineformset_factory(Propono, Elekto,
+                                        fields = ('enhavo',), extra=0)
     if request.method == 'POST':
-        form = ProponoForm(request.POST, request.FILES)
+        propono_form = ProponoForm(request.POST, request.FILES)
+        elektoj_formset = ElektojInlineFormSet(request.POST, request.FILES)
+        if propono_form.is_valid():
+            propono = propono_form.save(commit=False)
+            if elektoj_formset.is_valid():
+                propono.save()
+                elektoj_formset.save()
+                return redirect(reverse('vocxdonado:index'))
+        return render(request, 'vocxdonado/krei_proponon.html',
+                      {'propono_form': propono_form,
+                       'elektoj_formset': elektoj_formset})
 
-        if form.is_valid():
-            form.save()
-            # do something.
-            return redirect(reverse('vocxdonado:index'))
-        else:
-            return render(request, 'vocxdonado/krei_proponon.html', {'form': form})
-    else:
-        form = ProponoForm()
-        #ElektoInlineFormSet = forms.inlineformset_factory(Propono, Elekto,
-        #                                                  fields=('enhavo',))
-        return render(request, 'vocxdonado/krei_proponon.html', {'form': form})
+    propono_form = ProponoForm()
+    elekto_formset = ElektojInlineFormSet()
+    return render(request, 'vocxdonado/krei_proponon.html',
+                  {'propono_form': propono_form,
+                   'elekto_formset': elekto_formset})
+

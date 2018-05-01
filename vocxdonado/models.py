@@ -34,10 +34,11 @@ class Propono(models.Model):
         return self.titolo
 
     def clean(self):
-        if self.nombro_eblaj_elektoj >= self.elekto_set.count():
-            raise ValidationError(
-                "La nombro da elektoj por voĉdoni devas esti malpli ol la entuta kvanto de malsimilaj elektoj"
-            )
+        pass
+        #if self.nombro_eblaj_elektoj >= self.elekto_set.count():
+        #    raise ValidationError(
+        #        "La nombro da elektoj por voĉdoni devas esti malpli ol la entuta kvanto de malsimilaj elektoj"
+        #    )
 
 
 class ProponoForm(forms.ModelForm):
