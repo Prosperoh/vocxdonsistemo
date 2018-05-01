@@ -79,8 +79,8 @@ def krei_proponon(request):
                        'elektoj_formset': elektoj_formset})
 
     propono_form = ProponoForm()
-    elekto_formset = ElektojInlineFormSet()
+    elektoj_formset = ElektojInlineFormSet()
     return render(request, 'vocxdonado/krei_proponon.html',
                   {'propono_form': propono_form,
-                   'elekto_formset': elekto_formset})
+                   'elekto_formset': elektoj_formset})
 

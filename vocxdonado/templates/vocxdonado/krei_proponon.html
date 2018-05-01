@@ -15,8 +15,10 @@
 		var children = forms.getElementsByTagName("input");
 		var currentValues = [];
 		for (i = 0; i < children.length; i++) {
-			currentValues.push(children[i].value);
-			console.log(children[i].value);
+            if (children[i].type == 'text') {
+                currentValues.push(children[i].value);
+                console.log(children[i].value);
+            }
 		}
 		console.log("\n");
 		while (forms.firstChild) {
@@ -24,27 +26,41 @@
 		}
 
 		for (i = 0; i < quantity; i++) {
+            var label = document.createElement("label");
+            label.for = "id_elekto_set-" + i + "-enhavo";
+            label.innerHTML = "Elekto " + (i+1) + ": ";
 			var input = document.createElement("input");
 			input.type = "text";
 			input.maxlength = 128;
-			input.name = "elekto".i;
-			input.id = "id_elekto".i;
+			input.name = "id_elekto_set-" + i + "-enhavo";
+			input.id = "id_elekto_set-" + i + "-enhavo";
 			if (currentValues[i] != undefined) {
 				input.value = currentValues[i];
 			}
+            var hidden = document.createElement("input");
+            hidden.type = "hidden";
+            hidden.name = "elekto_set-" + i + "-ligita_propono";
+            hidden.id = "id_elekto_set-" + i + "-ligita_propono";
+            /*
+            var div = document.createElement("div");
+            div.id = "elekto".i;
+            div.appendChild(label);
+            div.appendChild(input);
+            div.appendChild(
+            */
+			forms.appendChild(label);
 			forms.appendChild(input);
-			forms.appendChild(document.createElement("br"));
+			forms.appendChild(hidden);
+            forms.append(document.createElement("br"));
 		};
 	}
+    window.onload = genInputFields;
 </script>
 <form method="post" id="total_form" action="">{% csrf_token %}
 	{{ propono_form.as_p }}
 	{{ elektoj_formset.management_form }}
 	{{ elektoj_formset.id }}
-	<div id="forms">
-	<input type="text" name="elekto0" maxlength="128"
-	required id="id_elekto0"/>
-	</div><!-- where the generated forms go -->
+    <div id="forms"></div><!-- where the generated forms go -->
 	<button type="submit" class="save btn btn-default">Enregistrigi</button>
 </form>
 
