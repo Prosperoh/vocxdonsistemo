@@ -63,24 +63,29 @@ def vocxdoni(request, propono_id):
 
 @login_required
 def krei_proponon(request):
-    ElektojInlineFormSet = forms.inlineformset_factory(Propono, Elekto,
-                                        fields = ('enhavo',), extra=0)
     if request.method == 'POST':
         propono_form = ProponoForm(request.POST, request.FILES)
-        elektoj_formset = ElektojInlineFormSet(request.POST, request.FILES)
         if propono_form.is_valid():
-            propono = propono_form.save(commit=False)
-            if elektoj_formset.is_valid():
-                propono.save()
-                elektoj_formset.save()
-                return redirect(reverse('vocxdonado:index'))
+            savita_objekto = propono_form.save(commit=False)
+            ElektojInlineFormSet = forms.inlineformset_factory(Propono, Elekto,
+                    fields=('enhavo',),
+                    extra=savita_objekto.nombro_eblaj_elektoj)
+            # Se ni jam estas validante la elektojn
+            if 'id_elekto_set-TOTAL_FORMS' in request.POST:
+                elektoj_formset = ElektojInlineFormSet(request.POST, request.FILES)
+                if elektoj_formset.is_valid():
+                    savita_propono = propono_form.save()
+                    elektoj_formset.save()
+                    return redirect(reverse('vocxdonado:index'))
+            else:
+                elektoj_formset = ElektojInlineFormSet()
+            return render(request, 'vocxdonado/krei_proponon.html',
+                          {'propono_form': propono_form,
+                           'elektoj_formset': elektoj_formset})
         return render(request, 'vocxdonado/krei_proponon.html',
-                      {'propono_form': propono_form,
-                       'elektoj_formset': elektoj_formset})
+                      {'propono_form': propono_form})
 
     propono_form = ProponoForm()
-    elektoj_formset = ElektojInlineFormSet()
     return render(request, 'vocxdonado/krei_proponon.html',
-                  {'propono_form': propono_form,
-                   'elekto_formset': elektoj_formset})
+                  {'propono_form': propono_form})
 

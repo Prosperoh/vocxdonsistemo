@@ -19,7 +19,7 @@ class Propono(models.Model):
     fin_dato = models.DateTimeField('findato')
     nombro_eblaj_elektoj = models.PositiveSmallIntegerField(
         'nombro da eblaj elektoj',
-        default=1, validators=[MinValueValidator(1)])
+        default=1, validators=[MinValueValidator(2)])
     tipo = models.CharField(
             max_length=128,
             choices= ( ('normala_sekreta', 'Normala sekreta'),
@@ -54,7 +54,7 @@ class ProponoForm(forms.ModelForm):
         #self.fields['pub_dato'].widget = forms.SelectDateTimeWidget()
         #self.fields['fin_dato'].widget = forms.SelectDateTimeWidget()
         #self.fields['pub_dato'].widget = widgets.AdminSplitDateTime()
-        self.fields['nombro_eblaj_elektoj'].widget.attrs['min'] = 1
+        self.fields['nombro_eblaj_elektoj'].widget.attrs['min'] = 2
         self.fields['nombro_eblaj_elektoj'].widget.attrs['onchange'] = \
                 'genInputFields()'
         self.fields['pub_dato'].initial = timezone.localtime()
