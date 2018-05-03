@@ -66,10 +66,12 @@ def krei_proponon(request):
     if request.method == 'POST':
         propono_form = ProponoForm(request.POST, request.FILES)
         if propono_form.is_valid():
+            # Se ni volas reŝanĝi la proponon
             savita_objekto = propono_form.save(commit=False)
             ElektojInlineFormSet = forms.inlineformset_factory(Propono, Elekto,
                     fields=('enhavo',),
-                    extra=savita_objekto.nombro_eblaj_elektoj)
+                    can_delete=False,
+                    extra=int(request.POST.get('nombro_entutaj_elektoj')))
             # Se ni jam estas validante la elektojn
             if 'id_elekto_set-TOTAL_FORMS' in request.POST:
                 elektoj_formset = ElektojInlineFormSet(request.POST, request.FILES)
@@ -79,6 +81,11 @@ def krei_proponon(request):
                     return redirect(reverse('vocxdonado:index'))
             else:
                 elektoj_formset = ElektojInlineFormSet()
+
+            # Ĝisdatigante la labelojn
+            for i, elekto in enumerate(elektoj_formset):
+                elekto.fields['enhavo'].label = "Elekto %d" % (i + 1)
+
             return render(request, 'vocxdonado/krei_proponon.html',
                           {'propono_form': propono_form,
                            'elektoj_formset': elektoj_formset})

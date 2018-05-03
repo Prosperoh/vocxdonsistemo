@@ -9,15 +9,31 @@
 
 {% if not elektoj_formset %}
 <form method="post" id="total_form" action="">{% csrf_token %}
-	{{ propono_form.as_p }}
+    {{ propono_form.management_form }}
+    {% for field in propono_form %}
+        {% if field.name == "nombro_eblaj_elektoj" %}
+	        {{ field.as_hidden }}
+        {% else %}
+        <p>{{ field.label }}: {{ field }}</p>
+        {% endif %}
+    {% endfor %}
+    <p>
+    <label for="nombro_entutaj_elektoj">Nombro da elektoj:</label>
+    <input type="number" name="nombro_entutaj_elektoj" value="2" min="2" required id="nombro_entutaj_elektoj" />
+    </p>
+    <p>
 	<button type="submit" class="save btn btn-default">Redakti la elektojn</button>
+    </p>
 </form>
 
 {% else %}
 <form method="post" id="total_form" action="">{% csrf_token %}
     {{ propono_form.as_p }}
-    {{ elektoj_formset }}
-	<button type="submit" class="save btn btn-default">Enregistrigi</button>
+    {{ elektoj_formset.management_form }}
+    {% for form in elektoj_formset %}
+        {{ form }}<br/>
+    {% endfor %}
+	<button type="submit" class="save btn btn-default">Enregistrigi proponon</button>
 </form>
 {% endif %}
 
